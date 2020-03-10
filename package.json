@@ -1,0 +1,21 @@
+{
+  "name": "todo_front_app",
+  "version": "1.0.0",
+  "description": "My rad Nuxt.js project",
+  "author": "ko_fukumura",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/apollo": "^4.0.0-rc19",
+    "graphql-tag": "^2.10.3",
+    "nuxt": "^2.0.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.3.3"
+  }
+}
