@@ -1,92 +1,120 @@
 <template>
-  <v-layout
-    column
-    justify-center
-    align-center
-  >
-    <v-flex
-      xs12
-      sm8
-      md6
-    >
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-  </v-layout>
+  <v-container>
+    <v-row>
+      <v-col cols="6" offset="3">
+        <v-card>
+          <v-card-title>Register Task</v-card-title>
+          <v-card-text>
+            <v-form>
+              <v-container>
+                <v-row>
+                  <v-col cols="6">
+                    <v-text-field v-model="newTask.title" label="Title" required />
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field v-model="newTask.description" label="Description" required />
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-btn @click="createTask(newTask)">Register</v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row v-for="task in tasks" :key="task.id">
+      <v-col cols="6" offset="3">
+        <v-card>
+          <v-card-title>
+            <v-checkbox v-model="task.completed" :label="task.title" @click="updateTask(task)" />
+            <v-btn text icon @click="deleteTask(task)">
+              <v-icon>clear</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text>{{ task.description }}</v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
+import tasks from '~/apollo/queries/tasks'
+import createTask from '~/apollo/mutations/createTask'
+import deleteTask from '~/apollo/mutations/deleteTask'
+import updateTask from '~/apollo/mutations/updateTask'
 
 export default {
-  components: {
-    Logo,
-    VuetifyLogo
+  data() {
+    return {
+      tasks: {},
+      newTask: {
+        title: '',
+        description: ''
+      }
+    }
+  },
+  methods: {
+    async createTask(task) {
+      try {
+        await this.$apollo.mutate({
+          mutation: createTask,
+          variables: {
+            id: task.id,
+            title: task.title,
+            description: task.description
+          },
+          refetchQueries: [{
+            query: tasks
+          }]
+        })
+        this.newTask = { title: '', description: ' '}
+      } catch (e) {
+        window.console.log(e)
+      }
+    },
+    async deleteTask(task) {
+      try {
+        await this.$apollo.mutate({
+          mutation: deleteTask,
+          variables: {
+            id: task.id
+          },
+          refetchQueries: [{
+            query: tasks
+          }]
+        })
+      } catch (e) {
+        window.console.log(e)
+      }
+    },
+    async updateTask(task) {
+      try {
+        await this.$apollo.mutate({
+          mutation: updateTask,
+          variables: {
+            id: task.id,
+            completed: !task.completed
+          },
+          refetchQueries: [{
+            query: tasks
+          }]
+        })
+      } catch (e) {
+        window.console.log(e)
+      }
+    }
+  },
+  apollo: {
+    tasks: {
+      query: tasks
+    }
   }
 }
 </script>
