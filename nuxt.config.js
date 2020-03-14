@@ -46,7 +46,9 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
-    '@nuxtjs/apollo' 
+    '@nuxtjs/apollo',
+    '@nuxtjs/axios',
+    '@nuxtjs/auth',
   ],
   /*
   ** vuetify module configuration
@@ -85,6 +87,15 @@ export default {
       default: {
         httpEndpoint: 'http://localhost:3000/graphql'
       }
+    }
+  },
+  // auth
+  auth: {
+    redirect: {
+    login: '/',
+    logout: '/logout',
+    callback: '/callback',
+    home: '/mypage',
     }
   },
   server: {

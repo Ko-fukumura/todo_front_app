@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.0-rc19",
+    "@nuxtjs/auth": "^4.8.5",
+    "@nuxtjs/axios": "^5.9.5",
     "graphql-tag": "^2.10.3",
     "nuxt": "^2.0.0"
   },
