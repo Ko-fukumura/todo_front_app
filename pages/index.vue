@@ -51,6 +51,7 @@ import deleteTask from '~/apollo/mutations/deleteTask'
 import updateTask from '~/apollo/mutations/updateTask'
 
 export default {
+  middlewear: 'auth',
   data() {
     return {
       tasks: {},

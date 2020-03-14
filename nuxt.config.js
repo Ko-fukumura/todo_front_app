@@ -50,6 +50,21 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
   ],
+  
+  axios: {
+    baseURL: 'http://localhost:3000/'
+  },
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'user_token', method: 'post', propertyName: 'jwt' },
+          user: false,
+          logout: false
+        }
+      }
+    }
+  },
   /*
   ** vuetify module configuration
   ** https://github.com/nuxt-community/vuetify-module
@@ -85,19 +100,20 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: 'http://localhost:3000/graphql'
+        httpEndpoint: 'http://localhost:3000/graphql',
+        getAuth: () => ''
       }
     }
   },
   // auth
-  auth: {
-    redirect: {
-    login: '/',
-    logout: '/logout',
-    callback: '/callback',
-    home: '/mypage',
-    }
-  },
+  // auth: {
+  //   redirect: {
+  //   login: '/',
+  //   logout: '/logout',
+  //   callback: '/callback',
+  //   home: '/mypage',
+  //   }
+  // },
   server: {
     port: 8080
   }
